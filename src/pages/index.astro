@@ -1,0 +1,102 @@
+---
+import QrCode from "@/components/QrCode.astro";
+import siteConfig, { quickLinks } from "@/data/site-config";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const socials = siteConfig.socialLinks ?? [];
+---
+
+<BaseLayout
+  title="Full Stack Developer & Consultant"
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Nhut Duong",
+    jobTitle: "Full Stack Developer & Consultant",
+    worksFor: { "@type": "Organization", name: "Bosch Digital" },
+    email: `mailto:${siteConfig.email}`,
+    telephone: siteConfig.phone,
+    url: siteConfig.siteUrl,
+    image: `${siteConfig.siteUrl}/avatar.webp`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Ho Chi Minh City",
+      addressCountry: "VN",
+    },
+    sameAs: (siteConfig.socialLinks ?? [])
+      .map((l) => l.href)
+      .concat("https://nhutduong.com"),
+  }}
+>
+  <article class="card">
+    <section class="identity">
+      <img
+        class="avatar"
+        src="/avatar.webp"
+        alt="Nhut Duong"
+        width="72"
+        height="72"
+        data-animate
+        style="--i: 0"
+      >
+      <p class="kicker mono-label" data-animate style="--i: 1">
+        Full Stack Developer &amp; Consultant
+      </p>
+      <h1 data-animate style="--i: 2">Nhut Duong<span class="dot">.</span></h1>
+      <p class="areas mono-label" data-animate style="--i: 3">
+        {["Applied AI", "Agentic Workflows", "Full Stack"].map(
+          (area, index) => [
+            index > 0 && <span class="sep">&middot;</span>,
+            area,
+          ],
+        )}
+      </p>
+      <div class="rule-gold" data-animate style="--i: 4"></div>
+      <p class="voice" data-animate style="--i: 5">
+        Crafting reliable, impactful digital solutions.
+      </p>
+      <div class="socials mono-label" data-animate style="--i: 8">
+        {socials.map((social, index) => [
+          index > 0 && <span class="sep">&middot;</span>,
+          <a href={social.href}>{social.text}</a>,
+        ])}
+      </div>
+    </section>
+
+    <section class="contact">
+      <a
+        class="btn-primary"
+        href="/nhut-duong.vcf"
+        download="nhut-duong.vcf"
+        data-animate
+        style="--i: 5"
+      >
+        Save Contact
+      </a>
+      <p class="quick mono-label" data-animate style="--i: 6">
+        {quickLinks.map((link, index) => [
+          index > 0 && <span class="sep">&middot;</span>,
+          <a href={link.href}>{link.label}</a>,
+        ])}
+      </p>
+      <div class="rows" data-animate style="--i: 7">
+        <div class="row">
+          <span class="label mono-label">Company</span>
+          <span class="value">Bosch Digital</span>
+        </div>
+        <div class="row">
+          <span class="label mono-label">Location</span>
+          <span class="value">Ho Chi Minh City</span>
+        </div>
+        <div class="row">
+          <span class="label mono-label">Journal</span>
+          <a class="value" href="https://nhutduong.com">nhutduong.com</a>
+        </div>
+      </div>
+      <div class="qr" data-animate style="--i: 8">
+        <QrCode payload={siteConfig.siteUrl} />
+        <p class="caption mono-label">Scan &middot; nhutdm.com</p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

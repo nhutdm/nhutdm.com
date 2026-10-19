@@ -1,0 +1,54 @@
+---
+import { encode } from "uqr";
+
+interface Props {
+  payload: string;
+  class?: string;
+}
+
+const { payload, class: className } = Astro.props;
+
+const qr = encode(payload, { ecc: "H", border: 4 });
+const total = qr.size;
+
+const pathParts: string[] = [];
+for (let y = 0; y < qr.data.length; y += 1) {
+  const row = qr.data[y];
+  let x = 0;
+  while (x < row.length) {
+    if (row[x] !== true) {
+      x += 1;
+      continue;
+    }
+    let run = 1;
+    while (x + run < row.length && row[x + run] === true) {
+      run += 1;
+    }
+    pathParts.push(`M${x},${y}h${run}v1h-${run}z`);
+    x += run;
+  }
+}
+const modulesPath = pathParts.join("");
+---
+
+<svg
+  viewBox={`0 0 ${total} ${total}`}
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="QR code to nhutdm.com"
+  class={className}
+  shape-rendering="crispEdges"
+>
+  <rect class="bg" width={total} height={total}></rect>
+  <path class="modules" d={modulesPath}></path>
+</svg>
+
+<style>
+.bg {
+  fill: var(--background);
+}
+
+.modules {
+  fill: var(--foreground);
+}
+</style>
